@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <arpa/inet.h>
+#include <netinet/in.h>
 
 static pthread_mutex_t lock=PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t lifecycle=PTHREAD_MUTEX_INITIALIZER;
