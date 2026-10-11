@@ -1,0 +1,67 @@
+name: Build TRMOfficial Payload Manager
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Get source and translations
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build the redesigned frontend
+        working-directory: frontend
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Set offline cache version
+        run: |
+          python3 - <<'PY'
+          import pathlib
+          path = pathlib.Path('frontend/dist/cache.appcache')
+          if path.exists():
+              path.write_text(path.read_text().replace('[[BUILD_DATE]]', '${{ github.sha }}-${{ github.run_id }}'))
+          PY
+
+      - name: Build PS5 compiler and dependencies
+        run: docker build -t trm-ps5-sdk -f Dockerfile.sdk .
+
+      - name: Compile Payload Manager ELF
+        run: docker run --rm -v "$GITHUB_WORKSPACE:/src" -w /src trm-ps5-sdk make all
+
+      - name: Verify and collect output
+        run: |
+          python3 - <<'PY'
+          import hashlib, pathlib, shutil
+          elf = pathlib.Path('pldmgr.elf')
+          if not elf.is_file() or elf.read_bytes()[:4] != b'\x7fELF':
+              raise SystemExit('No valid ELF produced')
+          output = pathlib.Path('build-output')
+          output.mkdir(exist_ok=True)
+          shutil.copy2(elf, output / 'pldmgr.elf')
+          (output / 'SHA256SUMS').write_text(hashlib.sha256(elf.read_bytes()).hexdigest() + '  pldmgr.elf\n')
+          (output / 'BUILD.txt').write_text('TRMOfficial Payload Manager UI\nSource: ${{ github.repository }}\nCommit: ${{ github.sha }}\nBuild: ${{ github.run_id }}\n')
+          PY
+
+      - name: Downloadable PS5 payload
+        uses: actions/upload-artifact@v4
+        with:
+          name: TRMOfficial-Payload-Manager-${{ github.run_number }}
+          path: build-output/
+          if-no-files-found: error
+          retention-days: 30
