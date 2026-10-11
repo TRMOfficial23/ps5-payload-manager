@@ -11,12 +11,14 @@ import {
   Menu,
   Terminal,
   X,
-  Star
+  Star,
+  Folder
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
 import './App.css'
 import './trm-theme.css'
+import { FileManager, DashboardSummary } from './components/views/AioTools'
 
 // Utilities
 import { cn, isPS5, isSystemPayload } from './utils/helpers'
@@ -484,13 +486,14 @@ function App() {
               <div className="p-2 bg-ps-blue rounded-xl">
                 <LogoIcon className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold tracking-tight text-white">TRM<span className="trm-brand-accent">Official</span></span>
+              <span className="text-2xl font-bold tracking-tight text-white">Payload Manager</span>
             </div>
           </div>
 
           <nav className="flex-1 space-y-2">
             <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={LayoutDashboard} label={t("app.nav.dashboard", "Dashboard")} />
             <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === 'storage'} onClick={() => setView('storage')} icon={Database} label={t("app.nav.storage", "Manage Payloads")} />
+            <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === "files"} onClick={() => setView("files")} icon={Folder} label="File Manager" />
             <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === 'autoload'} onClick={() => setView('autoload')} icon={RefreshCw} label={t("app.nav.autoload", "Autoload")} />
             <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === 'processes'} onClick={() => setView('processes')} icon={Cpu} label={t("app.nav.processes", "Active Processes")} />
             <NavButton sidebar sidebarExpanded={sidebarExpanded} active={view === 'settings'} onClick={() => setView('settings')} icon={Settings} label={t("app.nav.settings", "Settings")} />
@@ -518,6 +521,7 @@ function App() {
       )}>
         <NavButton active={view === 'dashboard'} onClick={() => setView('dashboard')} icon={LayoutDashboard} label={t("app.nav.dashboard", "Dashboard")} mobileLabel={t("app.nav.home_mobile", "Home")} />
         <NavButton showSeparator active={view === 'storage'} onClick={() => setView('storage')} icon={Database} label={t("app.nav.storage", "Manage Payloads")} mobileLabel={t("app.nav.manage_mobile", "Manage")} />
+        <NavButton active={view === "files"} onClick={() => setView("files")} icon={Folder} label="File Manager" mobileLabel="Files" />
         <NavButton showSeparator active={view === 'autoload'} onClick={() => setView('autoload')} icon={RefreshCw} label={t("app.nav.autoload", "Autoload")} mobileLabel={t("app.nav.auto_mobile", "Auto")} />
         <NavButton showSeparator active={view === 'processes'} onClick={() => setView('processes')} icon={Cpu} label={t("app.nav.processes", "Active Processes")} mobileLabel={t("app.nav.processes_mobile", "Processes")} />
         <NavButton showSeparator active={view === 'settings'} onClick={() => setView('settings')} icon={Settings} label={t("app.nav.settings", "Settings")} mobileLabel={t("app.nav.settings", "Settings")} />
@@ -542,9 +546,11 @@ function App() {
           isPS5 ? "pt-16 px-16 pb-12 flex-1 overflow-y-auto" : "pt-6 px-6 pb-36 md:pt-16 md:px-16 md:pb-12 md:flex-1 md:overflow-y-auto"
         )}>
           <header className="trm-workspace-header">
-            <div><p className="trm-eyebrow">YOUR CONSOLE. YOUR PAYLOADS.</p><h1>Payload <span>Manager</span></h1><p className="trm-workspace-subtitle">{t("app.nav." + (view === 'storage' ? 'storage' : view), view === 'dashboard' ? 'Dashboard' : view)}</p></div>
-            <div className="trm-connection"><span className="trm-connection-dot" aria-hidden="true" /><div><strong>{ip}</strong><span>itsPLK · {version}</span></div></div>
+            <div><h1>{view === "dashboard" ? "Dashboard" : view === "files" ? "File Manager" : "Payload Manager"}</h1><p className="trm-workspace-subtitle">{view === "dashboard" ? "Your payloads. Ready to launch." : "Your console. Everything in one place."}</p></div>
+            <div className="trm-connection"><span className="trm-connection-dot" aria-hidden="true" /><div><strong>{ip && ip !== "0.0.0.0" ? "PS5 connected" : "Connecting…"}</strong><span>{ip}</span></div></div>
           </header>
+          {view === 'files' && <FileManager />}
+          {view === 'dashboard' && <DashboardSummary payloads={payloads.filter(p => !isSystemPayload(p))} config={config} onNavigate={setView} />}
           {view === 'dashboard' && (() => {
             const visiblePayloads = payloads.filter(p => !isSystemPayload(p))
             const activeFavorites = favoritePayloads.filter(p => visiblePayloads.includes(p))
@@ -555,7 +561,7 @@ function App() {
             const txtOthers = t("app.dashboard.others", "Others")
 
             const gridCols = cn(
-              "grid gap-4 md:gap-6 transition-all",
+              "aio-payload-list grid gap-4 md:gap-6 transition-all",
               isPS5 ? "grid-cols-3 xl:grid-cols-4" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             )
             const makeCard = (p) => (
@@ -695,6 +701,7 @@ function App() {
           {view === 'settings' && (
             <SettingsView
               config={config}
+              ip={ip}
               onSaveConfig={handleSaveConfig}
               isPS5={isPS5}
               logs={logs}

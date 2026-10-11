@@ -31,3 +31,20 @@
 .trm-manager input,.trm-manager select,.trm-manager textarea{border-color:#30415a}
 @media(max-width:767px){.trm-workspace-header{align-items:flex-start;flex-direction:column;gap:20px;padding-bottom:24px;margin-bottom:26px}.trm-workspace-header h1{font-size:34px}.trm-connection{width:100%;padding:12px 15px}.trm-manager .trm-payload-card{min-height:132px;padding:20px}.trm-eyebrow{font-size:10px;letter-spacing:1.5px}}
 @media(prefers-reduced-motion:reduce){.trm-manager *{transition:none!important;scroll-behavior:auto!important}}
+
+/* AIO workspace inspired by the supplied dashboard reference. */
+.trm-manager{background:radial-gradient(ellipse at top,#0b202b 0,#061019 65%);color:#eff8ff}
+.trm-manager aside{margin:14px;border:1px solid #284758;border-radius:12px;background:#07141e!important;height:calc(100vh - 28px)}
+.trm-manager aside .trm-nav-button[aria-current="page"]{background:#06344a;border-left:5px solid #00d8f1;color:#00d8f1}
+.trm-workspace-header h1{font-size:46px}.trm-workspace-subtitle{font-size:23px;color:#91cdec;text-transform:none}
+.aio-panel{background:linear-gradient(110deg,#0b1a25,#0b1721);border:1px solid #284758;border-radius:12px;padding:22px;margin-bottom:18px}
+.aio-panel h2,.aio-panel h3{color:#f5faff;font-weight:700;font-size:23px;margin:0 0 8px}.aio-panel p{color:#91cdec;margin:6px 0}
+.aio-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.aio-stats strong{display:block;font-size:44px;color:#fff;font-weight:800}.aio-stats h3{font-size:18px;color:#91cdec}
+.aio-section-heading{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.aio-panel button,.aio-panel a,.aio-launch-label{display:inline-flex;gap:9px;align-items:center;justify-content:center;border:1px solid #00d8f1;color:#00d8f1;border-radius:8px;padding:10px 14px;min-height:44px}
+.aio-panel button:disabled{opacity:.4}.aio-panel button:hover,.aio-panel a:hover{background:#06344a}.aio-panel .aio-toggle{min-width:90px}.aio-panel .aio-toggle.on{background:#00d8f1;color:#061019}
+.aio-muted{color:#91aebf!important;font-size:13px}.aio-error{color:#ff9f9f!important}.aio-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.aio-toolbar form{display:flex;flex:1;gap:8px}.aio-toolbar input{min-width:100px;flex:1;background:#061019;color:#eff8ff;border:1px solid #284758;border-radius:8px;padding:10px}.aio-shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.aio-file-row{display:grid;grid-template-columns:minmax(0,1fr) 100px auto;gap:12px;align-items:center;border:1px solid #284758;border-radius:9px;padding:10px;margin:8px 0}.aio-panel .aio-file-name{justify-content:flex-start;border:none;min-width:0;color:#eff8ff}.aio-file-name span{overflow-wrap:anywhere}.aio-file-actions{display:flex;gap:8px}.aio-queue>div:not(:first-child){display:flex;gap:18px;align-items:center;border:1px solid #284758;padding:14px;margin:8px 0;border-radius:8px}.aio-queue>div>span{background:#122e40;padding:9px;border-radius:7px;color:#91cdec}
+.trm-manager .aio-payload-list{grid-template-columns:1fr!important}.trm-manager .trm-payload-card{min-height:85px;display:flex;flex-direction:row;align-items:center;gap:16px;padding:18px;border:1px solid #284758;background:#0b1a25}.trm-payload-card>.z-10{flex:1}.aio-launch-label{flex-shrink:0;min-width:140px;font-weight:700}.trm-payload-card .absolute.bottom-2{bottom:3px}.trm-manager main{padding-top:32px!important}.trm-manager aside .text-2xl{font-size:16px;letter-spacing:1px}
+@media(max-width:850px){.aio-stats{grid-template-columns:1fr}.aio-file-row{grid-template-columns:minmax(0,1fr) auto}.aio-file-row>.aio-muted{display:none}.aio-launch-label{min-width:85px}.trm-workspace-header h1{font-size:32px}.trm-workspace-subtitle{font-size:16px}}
+.aio-ftp-info{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:20px 0;padding:18px;background:#061019;border:1px solid #284758;border-radius:9px}.aio-ftp-info dt{font-size:13px;color:#91aebf}.aio-ftp-info dd{color:#00d8f1;font-weight:700;overflow-wrap:anywhere;margin-top:5px}
