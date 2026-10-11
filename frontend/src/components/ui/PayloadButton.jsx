@@ -67,6 +67,7 @@ const PayloadButton = ({ path, onClick, isLoading, sourceName, version, isFavori
           </button>
         </div>
       )}
+      {!isEditMode && <span className="aio-launch-label">▷ Launch</span>}
       <div className="absolute inset-0 rounded-ps-xl bg-ps-blue/0 group-hover:bg-ps-blue/5 transition-colors z-0 pointer-events-none" />
     </button>
   )
