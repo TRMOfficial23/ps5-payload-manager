@@ -1,4 +1,4 @@
-import ftplib, hashlib, io, json, pathlib, subprocess, urllib.request, urllib.error
+import ftplib, hashlib, io, json, pathlib, subprocess, urllib.request, urllib.error, socket, struct
 root=pathlib.Path('/data/trm-aio-integration')
 root.mkdir(parents=True,exist_ok=True)
 proc=subprocess.Popen(['./aio-host'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
@@ -30,6 +30,12 @@ try:
     except urllib.error.HTTPError as e:assert e.code==403
     (root/'escape').unlink()
     ftp.quit()
+    # Reset a download connection abruptly. The manager must survive SIGPIPE.
+    (root/'large.bin').write_bytes(b'0123456789abcdef'*1048576)
+    ftp=ftplib.FTP();ftp.connect('127.0.0.1',2121,timeout=10);ftp.login();ftp.cwd(str(root));ftp.voidcmd('TYPE I')
+    data=ftp.transfercmd('RETR large.bin');data.setsockopt(socket.SOL_SOCKET,socket.SO_LINGER,struct.pack('ii',1,0));data.close();ftp.close()
+    assert api('ftp')['enabled']
+    (root/'large.bin').unlink()
     # Off must interrupt an idle connected client, then permit a clean restart.
     ftp=ftplib.FTP();ftp.connect('127.0.0.1',2121,timeout=10);ftp.login()
     assert not api('ftp','POST',enabled=0)['enabled'];ftp.close()
