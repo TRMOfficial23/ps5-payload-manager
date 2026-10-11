@@ -1,0 +1,33 @@
+/* TRMOfficial presentation layer. Existing action handlers and API routes remain upstream. */
+:root{--color-ps-blue:#59e7dc;--color-ps-blue-glow:rgba(89,231,220,.18);--color-ps-black:#080b12;--color-ps-surface:#101621;--color-ps-card:#121b29;--color-ps-border:#243043;--font-inter:Arial,Helvetica,sans-serif}
+.text-ps-blue{color:#59e7dc!important}
+.trm-manager{background:#080b12;color:#f4f7fd}
+.trm-manager aside.glass-panel{background:#0d131e;border-right:1px solid #243043}
+.trm-manager aside .font-bold{letter-spacing:-.02em}
+.trm-brand-accent{color:#59e7dc}
+.trm-workspace-header{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 0 32px;margin:0 0 32px;border-bottom:1px solid #243043}
+.trm-eyebrow{margin:0 0 12px;color:#59e7dc;font-size:11px;font-weight:700;letter-spacing:2px}
+.trm-workspace-header h1{margin:0;font-size:42px;line-height:1.1;font-weight:800;letter-spacing:-1.5px}
+.trm-workspace-header h1 span{color:#59e7dc}
+.trm-workspace-subtitle{margin:12px 0 0;color:#a5b0c3;font-size:14px;text-transform:capitalize}
+.trm-connection{display:flex;align-items:center;gap:12px;background:#101a27;border:1px solid #243043;border-radius:12px;padding:14px 18px;flex-shrink:0}
+.trm-connection strong{display:block;font-size:14px;font-weight:700}
+.trm-connection span:not(.trm-connection-dot){display:block;font-size:11px;color:#a5b0c3;margin-top:5px}
+.trm-connection-dot{width:7px;height:7px;display:block;border-radius:50%;background:#59e7dc}
+.trm-manager .glass-card{background:#101621;border-color:#243043;border-radius:14px;box-shadow:none}
+.trm-manager .glass-card:hover{background:#152131;border-color:#59e7dc;transform:none}
+.trm-manager .trm-payload-card{min-height:142px;border-top:2px solid #30415a;padding:24px}
+.trm-manager .trm-payload-card:hover{border-top-color:#59e7dc}
+.trm-manager .trm-nav-button{border-radius:10px;box-shadow:none;min-height:48px}
+.trm-manager aside .trm-nav-button[aria-current="page"]{background:#17343a;color:#84f1e8;border:1px solid #2c555b}
+.trm-manager aside .trm-nav-button[aria-current="page"]:before{content:'';position:absolute;left:0;top:12px;bottom:12px;width:3px;background:#59e7dc;border-radius:3px}
+.trm-manager .italic{font-style:normal}
+.trm-manager h2,.trm-manager h3{letter-spacing:-.035em}
+.trm-manager .label-caps{color:#a5b0c3;letter-spacing:.08em}
+.trm-manager button,.trm-manager a,.trm-manager input,.trm-manager select{outline-offset:4px}
+.trm-manager button:focus-visible,.trm-manager a:focus-visible,.trm-manager input:focus-visible,.trm-manager select:focus-visible{outline:2px solid #a7fff6!important}
+.trm-manager .custom-scrollbar::-webkit-scrollbar{width:7px}
+.trm-manager .custom-scrollbar::-webkit-scrollbar-thumb{background:#30415a;border-radius:5px}
+.trm-manager input,.trm-manager select,.trm-manager textarea{border-color:#30415a}
+@media(max-width:767px){.trm-workspace-header{align-items:flex-start;flex-direction:column;gap:20px;padding-bottom:24px;margin-bottom:26px}.trm-workspace-header h1{font-size:34px}.trm-connection{width:100%;padding:12px 15px}.trm-manager .trm-payload-card{min-height:132px;padding:20px}.trm-eyebrow{font-size:10px;letter-spacing:1.5px}}
+@media(prefers-reduced-motion:reduce){.trm-manager *{transition:none!important;scroll-behavior:auto!important}}

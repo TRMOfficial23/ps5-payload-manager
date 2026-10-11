@@ -16,6 +16,7 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import './App.css'
+import './trm-theme.css'
 
 // Utilities
 import { cn, isPS5, isSystemPayload } from './utils/helpers'
@@ -429,7 +430,7 @@ function App() {
 
 
     <div className={cn(
-      "min-h-screen min-h-[100dvh] ps5-bg text-zinc-100 font-ps5 flex",
+      "trm-manager min-h-screen min-h-[100dvh] ps5-bg text-zinc-100 font-ps5 flex",
       isPS5 ? "flex-row overflow-hidden" : "flex-col md:flex-row md:overflow-hidden"
     )}>
       {/* Toast Container */}
@@ -483,7 +484,7 @@ function App() {
               <div className="p-2 bg-ps-blue rounded-xl">
                 <LogoIcon className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold tracking-tight text-white">PLDMGR</span>
+              <span className="text-2xl font-bold tracking-tight text-white">TRM<span className="trm-brand-accent">Official</span></span>
             </div>
           </div>
 
@@ -540,6 +541,10 @@ function App() {
           "custom-scrollbar max-w-[1800px] mx-auto w-full flex flex-col",
           isPS5 ? "pt-16 px-16 pb-12 flex-1 overflow-y-auto" : "pt-6 px-6 pb-36 md:pt-16 md:px-16 md:pb-12 md:flex-1 md:overflow-y-auto"
         )}>
+          <header className="trm-workspace-header">
+            <div><p className="trm-eyebrow">YOUR CONSOLE. YOUR PAYLOADS.</p><h1>Payload <span>Manager</span></h1><p className="trm-workspace-subtitle">{t("app.nav." + (view === 'storage' ? 'storage' : view), view === 'dashboard' ? 'Dashboard' : view)}</p></div>
+            <div className="trm-connection"><span className="trm-connection-dot" aria-hidden="true" /><div><strong>{ip}</strong><span>itsPLK · {version}</span></div></div>
+          </header>
           {view === 'dashboard' && (() => {
             const visiblePayloads = payloads.filter(p => !isSystemPayload(p))
             const activeFavorites = favoritePayloads.filter(p => visiblePayloads.includes(p))
