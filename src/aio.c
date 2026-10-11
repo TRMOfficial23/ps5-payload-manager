@@ -38,13 +38,22 @@ static int path_resolve(const char *cwd,const char *input,char *out,int create) 
     return snprintf(out,PATH_MAX,"%s%s%s",parent,strcmp(parent,"/")?"/":"",name)>=PATH_MAX?-1:0;
 }
 static int sendall(int fd,const void *buf,size_t n) {
-    const char *p=buf; while(n) {ssize_t s=send(fd,p,n,0);if(s<=0)return -1;p+=s;n-=s;}return 0;
+    int flags=0;
+#ifdef MSG_NOSIGNAL
+    flags=MSG_NOSIGNAL;
+#endif
+    const char *p=buf; while(n) {ssize_t s=send(fd,p,n,flags);if(s<=0)return -1;p+=s;n-=s;}return 0;
 }
 static void reply(int fd,const char *s) {sendall(fd,s,strlen(s));}
 static int alive(void) {pthread_mutex_lock(&lock);int v=enabled;pthread_mutex_unlock(&lock);return v;}
 static int waitfd(int fd,int seconds) {fd_set f;FD_ZERO(&f);FD_SET(fd,&f);struct timeval t={seconds,0};return select(fd+1,&f,0,0,&t)>0;}
 static void close_slot(int *slot) {pthread_mutex_lock(&lock);if(*slot>=0)close(*slot);*slot=-1;pthread_mutex_unlock(&lock);}
-static int publish(int *slot,int fd) {pthread_mutex_lock(&lock);if(!enabled){pthread_mutex_unlock(&lock);close(fd);return -1;}*slot=fd;pthread_mutex_unlock(&lock);return fd;}
+static int publish(int *slot,int fd) {
+#ifdef SO_NOSIGPIPE
+    int one=1;setsockopt(fd,SOL_SOCKET,SO_NOSIGPIPE,&one,sizeof one);
+#endif
+    pthread_mutex_lock(&lock);if(!enabled){pthread_mutex_unlock(&lock);close(fd);return -1;}*slot=fd;pthread_mutex_unlock(&lock);return fd;
+}
 static int open_data(void) {
     if(passive<0 || !waitfd(passive,15)) return -1;
     struct sockaddr_in remote; socklen_t len=sizeof remote;
