@@ -1,3 +1,4 @@
+import { FtpSettings } from './AioTools'
 import React, { useState } from 'react'
 import { Terminal, ChevronRight, Globe, Languages } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -40,7 +41,7 @@ const SettingRow = ({ title, description, children, icon: Icon, vertical }) => (
   </div>
 )
 
-const SettingsView = ({ config, onSaveConfig, setShowLogs, onNavigate }) => {
+const SettingsView = ({ config, ip, onSaveConfig, setShowLogs, onNavigate }) => {
   const { t, i18n } = useTranslation()
   const autoOpen = config.AUTO_BROWSER_OPEN !== false
   const autoInstall = config.AUTO_INSTALL_APP !== false
@@ -88,6 +89,7 @@ const SettingsView = ({ config, onSaveConfig, setShowLogs, onNavigate }) => {
         </h2>
       </div>
 
+      <FtpSettings ip={ip} />
       {/* Startup Settings */}
       <section className="space-y-8">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
