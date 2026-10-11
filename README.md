@@ -19,7 +19,7 @@ This fork extends [itsPLK's PS5 Payload Manager](https://github.com/itsPLK/ps5-p
 - **Existing functions retained:** payload launching, favorites, USB imports, repository downloads and sources, autoload order and delays, process controls, logs, app installation, and existing settings.
 - **File Manager:** browse console and USB folders, download files, create folders, copy files and folders with their contents, move them within storage or between drives, rename files, and delete files or empty folders. Select Copy or Move, open the destination, and choose **Copy to current folder** or **Move to current folder**. Existing destinations are not overwritten. USB drives appear only while mounted. Writes are supported in /data and USB storage; system locations are read-only. File uploads use FTP.
 - **FTP in Settings:** switch the built-in server on or off. When enabled, Settings shows the PS5 IP address and port **2121**, with no username or password fields. FTP starts off each time Payload Manager starts, supports passive transfers, and serves one client at a time.
-- **FTP startup fix:** the worker now has an explicit 1 MB thread stack and stores its 64 KB transfer buffer on the heap. The previous compiled worker reserved over 73 KB before accepting a connection, creating a risk of immediate stack overflow. The corrected native worker passes a stack-frame limit of 32 KB; PS5 confirmation is still pending.
+- **FTP startup fix:** the worker now has an explicit 1 MB thread stack and stores its 64 KB transfer buffer on the heap. The previous compiled worker reserved over 73 KB before accepting a connection, creating a risk of immediate stack overflow. The corrected native worker passes a stack-frame limit of 32 KB. FTP startup is now confirmed working on the PS5.
 - **Transfer handling:** stopping FTP closes its connections. Interrupted client transfers are handled without stopping Payload Manager. If another payload uses port 2121, Settings reports the conflict.
 
 ### Screenshots
@@ -44,9 +44,9 @@ These screenshots show the implemented interface in a local preview with sample 
 
 ### Build and testing
 
-The [AIO build and integration tests passed](https://github.com/TRMOfficial23/ps5-payload-manager/actions/runs/38109343126). Tests cover real file operations, FTP upload/download, write restrictions, server stop/restart, an abrupt client disconnect, repeated startup toggles with a small-default-stack harness, nested folder copies, moves between mounted drives, USB visibility, collision protection, and failed-copy cleanup. Physical PS5 testing of this AIO build is still pending.
+The [AIO build and integration tests passed](https://github.com/TRMOfficial23/ps5-payload-manager/actions/runs/38109343126). Tests cover real file operations, FTP upload/download, write restrictions, server stop/restart, an abrupt client disconnect, repeated startup toggles with a small-default-stack harness, nested folder copies, moves between mounted drives, USB visibility, collision protection, and failed-copy cleanup. **Confirmed on a physical PS5 by TRMOfficial:** FTP connects and transfers successfully; switching FTP off closes the connection while Payload Manager stays running. File Manager operations, including deletion and transfers, were tested and confirmed working. v1.11 is the verified working baseline. Other edge cases listed above are covered by automated integration tests.
 
-To download this fork's compiled build, open that Actions run and download **TRMOfficial-Payload-Manager-5** from Artifacts while it is available. Future builds can be started from this fork's build workflow. The upstream releases and autoloaders described below contain the upstream manager; use this fork's compiled ELF for these AIO additions.
+Download the verified **v1.11 ELF** from [this fork's release](https://github.com/TRMOfficial23/ps5-payload-manager/releases/tag/trm-aio-v1.11). The release includes the same compiled ELF used in the successful PS5 test. The Actions artifact **TRMOfficial-Payload-Manager-5** is also available while retained. Future builds can be started from this fork's build workflow. The upstream releases and autoloaders described below contain the upstream manager; use this fork's compiled ELF for these AIO additions.
 
 ---
 
@@ -72,7 +72,7 @@ If you are using an older version and don't want to update the entire autoloader
 2. Add `pldmgr.elf` as the only entry in your `autoload.txt` config file.
 
 ### Standalone / Manual Loading
-You can also manually load the manager like any other `.elf` file. Grab the latest version from the [Releases](https://github.com/itsPLK/ps5-payload-manager/releases) page.
+You can also manually load the manager like any other `.elf` file. For this AIO fork, download the verified ELF from [TRMOfficial Releases](https://github.com/TRMOfficial23/ps5-payload-manager/releases/tag/trm-aio-v1.11). Rename it to `pldmgr.elf` if your existing loader expects that name.
 
 ## Custom Repositories
 You can add third-party payload repositories to the manager. To learn how to create your own repository JSON and host it, see the [Custom Repositories Guide](CUSTOM_REPOSITORIES.md).
