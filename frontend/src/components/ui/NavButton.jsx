@@ -7,8 +7,9 @@ const NavButton = ({ active, onClick, icon: Icon, label, mobileLabel, className,
       {showSeparator && <div className="w-px h-6 bg-white/10 md:hidden" />}
       <button
         onClick={onClick}
+        aria-current={active ? "page" : undefined}
         className={cn(
-          "flex items-center transition-all border group relative outline-none",
+          "trm-nav-button flex items-center transition-all border group relative outline-none",
           sidebar
             ? cn("w-full p-4 mb-2 rounded-2xl border-none", sidebarExpanded ? "justify-start space-x-4" : "justify-center")
             : (isPS5 ? "flex-row space-x-3 px-6 py-3 rounded-2xl" : "flex-col md:flex-row md:space-x-3 px-4 md:px-6 py-2 md:py-3 rounded-2xl border-none flex-1 md:flex-none"),
