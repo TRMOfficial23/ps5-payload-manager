@@ -17,8 +17,9 @@ This fork extends [itsPLK's PS5 Payload Manager](https://github.com/itsPLK/ps5-p
 
 - **New dashboard:** dark cyan styling, sidebar navigation, installed-payload count, startup queue, transfer count, console IP, and visible Launch controls.
 - **Existing functions retained:** payload launching, favorites, USB imports, repository downloads and sources, autoload order and delays, process controls, logs, app installation, and existing settings.
-- **File Manager:** browse console and USB folders, download files, create folders, rename or move files, and delete files or empty folders. Writes are supported in /data and USB storage; system locations are read-only. File uploads use FTP.
+- **File Manager:** browse console and USB folders, download files, create folders, copy files and folders with their contents, move them within storage or between drives, rename files, and delete files or empty folders. Select Copy or Move, open the destination, and choose **Copy to current folder** or **Move to current folder**. Existing destinations are not overwritten. USB drives appear only while mounted. Writes are supported in /data and USB storage; system locations are read-only. File uploads use FTP.
 - **FTP in Settings:** switch the built-in server on or off. When enabled, Settings shows the PS5 IP address and port **2121**, with no username or password fields. FTP starts off each time Payload Manager starts, supports passive transfers, and serves one client at a time.
+- **FTP startup fix:** the worker now has an explicit 1 MB thread stack and stores its 64 KB transfer buffer on the heap. The previous compiled worker reserved over 73 KB before accepting a connection, creating a risk of immediate stack overflow. The corrected native worker passes a stack-frame limit of 32 KB; PS5 confirmation is still pending.
 - **Transfer handling:** stopping FTP closes its connections. Interrupted client transfers are handled without stopping Payload Manager. If another payload uses port 2121, Settings reports the conflict.
 
 ### Screenshots
@@ -33,15 +34,19 @@ These screenshots show the implemented interface in a local preview with sample 
 
 ![Payload Manager File Manager preview](./Payload-Manager-Files-Preview.png)
 
+**Move to current folder**
+
+![Payload Manager Move to current folder preview](./Payload-Manager-Move-Preview.png)
+
 **FTP settings — IP and port only**
 
 ![Payload Manager FTP settings preview](./Payload-Manager-FTP-Preview.png)
 
 ### Build and testing
 
-The [AIO build and integration tests passed](https://github.com/TRMOfficial23/ps5-payload-manager/actions/runs/38107829932). Tests cover real file operations, FTP upload/download, write restrictions, server stop/restart, and an abrupt client disconnect. Physical PS5 testing of this AIO build is still pending.
+The [AIO build and integration tests passed](https://github.com/TRMOfficial23/ps5-payload-manager/actions/runs/38109343126). Tests cover real file operations, FTP upload/download, write restrictions, server stop/restart, an abrupt client disconnect, repeated startup toggles with a small-default-stack harness, nested folder copies, moves between mounted drives, USB visibility, collision protection, and failed-copy cleanup. Physical PS5 testing of this AIO build is still pending.
 
-To download this fork's compiled build, open that Actions run and download **TRMOfficial-Payload-Manager-4** from Artifacts while it is available. Future builds can be started from this fork's build workflow. The upstream releases and autoloaders described below contain the upstream manager; use this fork's compiled ELF for these AIO additions.
+To download this fork's compiled build, open that Actions run and download **TRMOfficial-Payload-Manager-5** from Artifacts while it is available. Future builds can be started from this fork's build workflow. The upstream releases and autoloaders described below contain the upstream manager; use this fork's compiled ELF for these AIO additions.
 
 ---
 
