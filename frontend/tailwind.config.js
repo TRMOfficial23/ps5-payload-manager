@@ -7,12 +7,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        'ps-blue': '#0095ff',
-        'ps-blue-glow': 'rgba(0, 149, 255, 0.4)',
-        'ps-black': '#08080a',
-        'ps-surface': '#101014',
-        'ps-card': 'rgba(24, 24, 28, 0.8)',
-        'ps-border': 'rgba(255, 255, 255, 0.08)',
+        'ps-blue': '#59e7dc',
+        'ps-blue-glow': 'rgba(89, 231, 220, 0.18)',
+        'ps-black': '#080b12',
+        'ps-surface': '#101621',
+        'ps-card': '#121b29',
+        'ps-border': '#243043',
       },
       borderRadius: {
         'ps-xl': '1rem',
