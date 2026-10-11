@@ -23,6 +23,7 @@
 #include "history_mgr.h"
 #include "process_mgr.h"
 #include "ps5_launcher.h"
+#include "aio.h"
 
 #include "assets_index_html.h"
 #include "assets_cache_appcache.h"
@@ -152,6 +153,12 @@ enum MHD_Result http_on_request(void *cls, struct MHD_Connection *conn,
 
     /* Set flag that we received a request (meaning browser is open) */
     log_server_set_active();
+
+    if (strncmp(url, "/aio/", 5) == 0) {
+        if (*con_cls == NULL) { *con_cls = (void *)1; return MHD_YES; }
+        if (*upload_data_size) { *upload_data_size = 0; return MHD_YES; }
+        return aio_request(conn, url, method);
+    }
 
     /* ── Initial call for a new request ────────────────────── */
     if (*con_cls == NULL) {

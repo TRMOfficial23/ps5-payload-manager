@@ -265,6 +265,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    extern void aio_shutdown(void);
+    aio_shutdown();
     pldmgr_log("[PLDMGR] Shutting down...\n");
     if (daemon)
         MHD_stop_daemon(daemon);
