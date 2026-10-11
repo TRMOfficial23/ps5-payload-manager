@@ -550,6 +550,7 @@ function App() {
             <div className="trm-connection"><span className="trm-connection-dot" aria-hidden="true" /><div><strong>{ip && ip !== "0.0.0.0" ? "PS5 connected" : "Connecting…"}</strong><span>{ip}</span></div></div>
           </header>
           {view === 'files' && <FileManager />}
+          <div className={view === 'dashboard' ? 'aio-dashboard' : ''}>
           {view === 'dashboard' && <DashboardSummary payloads={payloads.filter(p => !isSystemPayload(p))} config={config} onNavigate={setView} />}
           {view === 'dashboard' && (() => {
             const visiblePayloads = payloads.filter(p => !isSystemPayload(p))
@@ -657,6 +658,7 @@ function App() {
             )
           })()}
 
+          </div>
           {view === 'storage' && (
             <StorageHub
               payloads={payloads}
@@ -766,3 +768,4 @@ function App() {
 }
 
 export default App
+
