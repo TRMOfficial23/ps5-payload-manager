@@ -41,6 +41,13 @@ jobs:
       - name: Build PS5 compiler and dependencies
         run: docker build -t trm-ps5-sdk -f Dockerfile.sdk .
 
+      - name: Test file manager and FTP transfers
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y libmicrohttpd-dev
+          gcc -Wall -Iinclude tools/aio_host.c src/json_helpers.c src/utils.c -lmicrohttpd -lpthread -o aio-host
+          sudo python3 tools/test_aio.py
+
       - name: Compile Payload Manager ELF
         run: docker run --rm -v "$GITHUB_WORKSPACE:/src" -w /src trm-ps5-sdk make all
 
