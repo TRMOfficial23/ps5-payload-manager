@@ -45,11 +45,25 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y libmicrohttpd-dev
-          gcc -Wall -Iinclude tools/aio_host.c src/json_helpers.c src/utils.c -lmicrohttpd -lpthread -o aio-host
+          gcc -Os -Wall -Iinclude tools/aio_host.c src/json_helpers.c src/utils.c -lmicrohttpd -lpthread -o aio-host
           sudo python3 tools/test_aio.py
 
       - name: Compile Payload Manager ELF
         run: docker run --rm -v "$GITHUB_WORKSPACE:/src" -w /src trm-ps5-sdk make all
+
+      - name: Check native FTP worker stack usage
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE:/src" -w /src trm-ps5-sdk /opt/ps5-payload-sdk/bin/prospero-clang -Os -Wall -fstack-usage -Iinclude -I/opt/ps5-payload-sdk/target/include -c src/aio.c -o aio-stack.o
+          cat aio-stack.su
+          python3 - <<'PY'
+          import pathlib
+          report=pathlib.Path('aio-stack.su').read_text()
+          worker=[line for line in report.splitlines() if 'ftp_worker' in line]
+          assert worker, 'Missing native worker stack report'
+          for line in worker:
+              assert int(line.split('\t')[1]) < 32768, line
+          print('PASS: native FTP worker stack frame below 32 KB')
+          PY
 
       - name: Verify and collect output
         run: |
