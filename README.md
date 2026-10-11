@@ -3,15 +3,47 @@
 </p>
 <h1 align="center">PS5 Payload Manager</h1>
 
-<p align="center">A modern, web-based dashboard to easily manage, import, and automatically load payloads on your PS5.</p>
+<p align="center">Payloads, files, and FTP in one place. Customized by TRMOfficial, based on itsPLK Payload Manager.</p>
 
 <p align="center">
   <a href="https://crowdin.com/project/ps5-payload-manager"><img src="https://badges.crowdin.net/ps5-payload-manager/localized.svg" alt="Crowdin"></a>
 </p>
 
-<p align="center">
- <img src="./pldmgr_screenshot.png" width="600" />
-</p>
+## TRMOfficial AIO update
+
+This fork extends [itsPLK's PS5 Payload Manager](https://github.com/itsPLK/ps5-payload-manager) with a redesigned dashboard, a File Manager, and an optional FTP server. The app remains named **Payload Manager**.
+
+### What changed
+
+- **New dashboard:** dark cyan styling, sidebar navigation, installed-payload count, startup queue, transfer count, console IP, and visible Launch controls.
+- **Existing functions retained:** payload launching, favorites, USB imports, repository downloads and sources, autoload order and delays, process controls, logs, app installation, and existing settings.
+- **File Manager:** browse console and USB folders, download files, create folders, rename or move files, and delete files or empty folders. Writes are supported in /data and USB storage; system locations are read-only. File uploads use FTP.
+- **FTP in Settings:** switch the built-in server on or off. When enabled, Settings shows the PS5 IP address and port **2121**, with no username or password fields. FTP starts off each time Payload Manager starts, supports passive transfers, and serves one client at a time.
+- **Transfer handling:** stopping FTP closes its connections. Interrupted client transfers are handled without stopping Payload Manager. If another payload uses port 2121, Settings reports the conflict.
+
+### Screenshots
+
+These screenshots show the implemented interface in a local preview with sample data. They are not photographs or captures from a PS5.
+
+**Dashboard**
+
+![Payload Manager dashboard preview](./Payload-Manager-AIO-Preview.png)
+
+**File Manager**
+
+![Payload Manager File Manager preview](./Payload-Manager-Files-Preview.png)
+
+**FTP settings — IP and port only**
+
+![Payload Manager FTP settings preview](./Payload-Manager-FTP-Preview.png)
+
+### Build and testing
+
+The [AIO build and integration tests passed](https://github.com/TRMOfficial23/ps5-payload-manager/actions/runs/38107829932). Tests cover real file operations, FTP upload/download, write restrictions, server stop/restart, and an abrupt client disconnect. Physical PS5 testing of this AIO build is still pending.
+
+To download this fork's compiled build, open that Actions run and download **TRMOfficial-Payload-Manager-4** from Artifacts while it is available. Future builds can be started from this fork's build workflow. The upstream releases and autoloaders described below contain the upstream manager; use this fork's compiled ELF for these AIO additions.
+
+---
 
 ## Features
 - **Web-Based Interface**: A modern dashboard to manage payloads from your PC, phone, or the PS5 itself.
